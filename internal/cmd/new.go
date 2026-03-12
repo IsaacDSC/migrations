@@ -22,10 +22,15 @@ func New(filename string, state []migration.Migrate) {
 	content := `
 		package main
 
-		import "database/sql"
+		import (
+			"database/sql"
+
+			"github.com/IsaacDSC/migrations"
+			"github.com/IsaacDSC/migrations/migration"
+		)
 
 		func init() {
-			state = append(state, Migration{
+			migrations.State = append(migrations.State, migration.Migrate{
 				Version: 1,
 				Up: func(db *sql.Tx) error {
 					return nil
@@ -35,6 +40,7 @@ func New(filename string, state []migration.Migrate) {
 				},
 			})
 		}
+
 		`
 	os.WriteFile(path, []byte(content), 0644)
 
