@@ -41,7 +41,9 @@ func Start(db *sql.DB) {
 
 		cmd.New(os.Args[2], State)
 	case "up":
-		cmd.Up(db, database.InsertMigration, dbVersion, State)
+		if err := cmd.Up(db, database.InsertMigration, dbVersion, State); err != nil {
+			log.Fatal(err)
+		}
 	case "down":
 		cmd.Down(db, database.UpdateMigration, dbVersion, State)
 	case "help":

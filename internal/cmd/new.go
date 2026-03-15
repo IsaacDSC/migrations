@@ -19,7 +19,7 @@ func New(filename string, state []migration.Migrate) {
 
 	version := len(state) + 1
 	path := fmt.Sprintf("%s/v%d_%s.go", pathMigration, version, filename)
-	content := `
+	content := fmt.Sprintf(`
 		package main
 
 		import (
@@ -31,7 +31,7 @@ func New(filename string, state []migration.Migrate) {
 
 		func init() {
 			migrations.State = append(migrations.State, migration.Migrate{
-				Version: 1,
+				Version: %d,
 				Up: func(db *sql.Tx) error {
 					return nil
 				},
@@ -41,7 +41,7 @@ func New(filename string, state []migration.Migrate) {
 			})
 		}
 
-		`
+	`, version)
 	os.WriteFile(path, []byte(content), 0644)
 
 	// execute go fmt ./migrations/...
